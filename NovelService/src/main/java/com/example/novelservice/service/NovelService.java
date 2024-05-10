@@ -12,6 +12,15 @@ public class NovelService {
     @Autowired
     private NovelRepository repository;
 
+    public Novel saveNovel(Novel novel){
+        return repository.save(novel);
+    }
+    public Novel updateNovel(Novel novel){
+        return repository.save(novel);
+    }
+    public void deleteNovelById(long id){
+        repository.deleteById(id);
+    }
     public List<Novel> getAllNovel(){
         return repository.findAll();
     }
