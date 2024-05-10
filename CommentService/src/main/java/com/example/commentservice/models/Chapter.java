@@ -1,4 +1,4 @@
-package com.example.notificationservice.models;
+package com.example.commentservice.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,16 +7,20 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
-@Table(name = "notification")
+@Table(name = "chapters")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @ToString
-public class Notification {
+public class Chapter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String title;
+    private int numberText;
+    @Lob
     private String content;
     @ManyToOne
-    private User user;
+    private Novel novel;
+
 }

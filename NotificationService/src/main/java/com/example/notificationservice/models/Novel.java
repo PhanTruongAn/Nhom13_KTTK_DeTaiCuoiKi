@@ -1,6 +1,6 @@
-package com.example.novelservice.models;
+package com.example.notificationservice.models;
 
-import com.example.novelservice.enums.Genre;
+import com.example.notificationservice.enums.Genre;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

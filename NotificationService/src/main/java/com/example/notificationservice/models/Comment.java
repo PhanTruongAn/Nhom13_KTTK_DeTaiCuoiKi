@@ -6,17 +6,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 @Entity
-@Table(name = "notification")
+@Table(name = "comment")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @ToString
-public class Notification {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String content;
+    @Lob
+    private String text;
+    private LocalDate timeComment;
     @ManyToOne
     private User user;
+    @ManyToOne
+    private Novel novel;
 }

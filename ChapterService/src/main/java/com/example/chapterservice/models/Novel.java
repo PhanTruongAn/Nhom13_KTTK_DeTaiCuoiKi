@@ -1,6 +1,6 @@
-package com.example.novelservice.models;
+package com.example.chapterservice.models;
 
-import com.example.novelservice.enums.Genre;
+import com.example.chapterservice.enums.Genre;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

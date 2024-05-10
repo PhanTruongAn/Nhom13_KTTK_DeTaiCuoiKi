@@ -1,4 +1,4 @@
-package com.example.notificationservice.models;
+package com.example.commentservice.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
