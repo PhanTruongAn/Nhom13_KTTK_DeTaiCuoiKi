@@ -15,16 +15,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class NovelServiceApplication {
 @Autowired
 public NovelService service;
+    @Autowired
+    public NovelRepository repository;
     public static void main(String[] args) {
         SpringApplication.run(NovelServiceApplication.class, args);
     }
@@ -49,6 +48,7 @@ CommandLineRunner initDatabase(NovelRepository novelRepository, UserRepository u
         for (int i = 0; i < 10; i++) {
             createNovel(faker, novelRepository, users);
         }
+
     };
 }
 

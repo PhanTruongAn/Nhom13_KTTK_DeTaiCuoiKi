@@ -7,6 +7,7 @@ public enum Genre {
     MYSTERY,
     HORROR,
     HISTORICAL,
+    ACTION,
     ADVENTURE,
     THRILLER,
     COMEDY,

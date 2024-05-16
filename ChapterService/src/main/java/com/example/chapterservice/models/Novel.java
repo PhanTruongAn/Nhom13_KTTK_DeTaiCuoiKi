@@ -1,6 +1,7 @@
 package com.example.chapterservice.models;
 
 import com.example.chapterservice.enums.Genre;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,8 +25,8 @@ public class Novel {
     private String description;
     private String author;
     @ElementCollection(targetClass = Genre.class)
-    @JoinTable(name = "genres", joinColumns = @JoinColumn(name = "novel_id"))
-    @Column(name = "genre", nullable = false)
+    @CollectionTable(name = "genres", joinColumns = @JoinColumn(name = "novel_id"))
+    @Column(name = "genre", length = 255, nullable = false)
     @Enumerated(EnumType.STRING)
     private Set<Genre> genre;
     @OneToMany(mappedBy = "novel",cascade = CascadeType.ALL)
