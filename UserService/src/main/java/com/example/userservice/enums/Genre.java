@@ -1,20 +1,21 @@
 package com.example.userservice.enums;
 
 public enum Genre{
-    VIỄN_TƯỞNG,
-    KHOA_HỌC_VIỄN_TƯỞNG,
-    LÃNG_MẠN,
-    BÍ_ẨN,
-    KINH_DỊ,
-    LỊCH_SỬ,
-    PHIÊU_LƯU,
-    KỊCH_TÍNH,
-    HÀI_HƯỚC,
-    GÂY_CẤN,
-    TIÊN_HIỆP,
-    KIẾM_HIỆP,
-    HUYỀN_HUYỄN,
-    ĐÔ_THỊ,
-    VÕNG_DU,
-    ĐỒNG_NHÂN
+    SCIENCE_FICTION,
+    FANTASY,
+    ROMANCE,
+    MYSTERY,
+    HORROR,
+    HISTORICAL,
+    ACTION,
+    ADVENTURE,
+    THRILLER,
+    COMEDY,
+    SUSPENSE,
+    XIANXIA,
+    WUXIA,
+    SUPERNATURAL,
+    URBAN,
+    VIRTUAL_REALITY,
+    FANFICTION
 }

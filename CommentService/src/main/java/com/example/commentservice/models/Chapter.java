@@ -1,5 +1,6 @@
 package com.example.commentservice.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,10 +18,10 @@ public class Chapter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private int numberText;
     @Lob
     private String content;
     @ManyToOne
+    @JsonIgnore
     private Novel novel;
 
 }

@@ -1,0 +1,34 @@
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+      routes:
+        - id: NovelService
+          uri: http://localhost:8083
+          predicates:
+            - Path=/novel/**
+        - id: ChapterService
+          uri: http://localhost:8084
+          predicates:
+            - Path=/chapter/**
+        - id: UserService
+          uri: http://localhost:8081
+          predicates:
+            - Path=/user/**
+        - id: CommentService
+          uri: http://localhost:8082
+          predicates:
+            - Path=/comment/**
+        - id: NotificationService
+          uri: http://localhost:8085
+          predicates:
+            - Path=/notification/**

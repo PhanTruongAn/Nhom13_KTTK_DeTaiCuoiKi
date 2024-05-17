@@ -5,10 +5,14 @@ import com.example.chapterservice.models.Novel;
 import com.example.chapterservice.repository.ChapterRepository;
 import com.example.chapterservice.service.ChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/chapter")
@@ -28,6 +32,18 @@ public class ChapterController {
         repository.save(chapter);
         service.create(chapter);
         return ResponseEntity.status(HttpStatus.OK).body("Create chapter is success!");
+    }
+
+    @GetMapping("/get-chapter-by-novel/{id}")
+    public ResponseEntity<List<Chapter>> getChapters(@PathVariable Long id){
+         RestTemplate restTemplate = new RestTemplate();
+         String url = "http://localhost:8083/novel/get-chapters/" + id;
+        ResponseEntity<List<Chapter>> response = restTemplate.exchange(
+                url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Chapter>>() {}
+        );
+        List<Chapter> chapters = response.getBody();
+        service.saveChapters(chapters);
+        return response;
     }
 
     @GetMapping("/find-by-id/{id}")

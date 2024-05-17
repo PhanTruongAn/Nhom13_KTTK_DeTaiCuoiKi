@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ChapterService {
     private static final String KEY_PREFIX = "chapter:";
@@ -33,7 +35,12 @@ public class ChapterService {
         String key = KEY_PREFIX + id;
         redisTemplate.delete(key);
     }
-
+    public void saveChapters(List<Chapter> chapters) {
+        for (Chapter chapter : chapters) {
+            String key = KEY_PREFIX + chapter.getId();
+            redisTemplate.opsForValue().set(key, chapter);
+        }
+    }
 
 
     public void update(Chapter chapter) {

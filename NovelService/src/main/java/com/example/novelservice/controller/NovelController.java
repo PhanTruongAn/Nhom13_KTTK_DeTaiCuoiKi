@@ -1,5 +1,6 @@
 package com.example.novelservice.controller;
 
+import com.example.novelservice.models.Chapter;
 import com.example.novelservice.models.Novel;
 import com.example.novelservice.repository.NovelRepository;
 import com.example.novelservice.service.NovelService;
@@ -16,7 +17,7 @@ public class NovelController {
     @Autowired
     private NovelService service;
     @Autowired
-private NovelRepository repository;
+    private NovelRepository repository;
     @GetMapping("/get-all")
     public List<Novel> getAllNovel(){
         return service.getAllNovel();
@@ -38,5 +39,15 @@ private NovelRepository repository;
     @PutMapping("/update-novel")
     public ResponseEntity<Boolean> updateNovel(@RequestBody Novel novel){
         return ResponseEntity.ok(service.updateNovel(novel));
+    }
+
+    @GetMapping("/get-chapters/{id}")
+    public List<Chapter> getChapters(@PathVariable Long id) {
+        Novel novel = repository.findById(id).orElse(null);
+        List<Chapter> chapters = null;
+        if (novel != null) {
+            chapters = novel.getChapters();
+        }
+        return chapters;
     }
 }
