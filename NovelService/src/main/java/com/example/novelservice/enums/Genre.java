@@ -4,6 +4,7 @@ public enum Genre {
     SCIENCE_FICTION,
     FANTASY,
     ROMANCE,
+    DRAMA,
     MYSTERY,
     HORROR,
     HISTORICAL,
@@ -17,5 +18,7 @@ public enum Genre {
     SUPERNATURAL,
     URBAN,
     VIRTUAL_REALITY,
-    FANFICTION
+    FANFICTION,
+
+
 }

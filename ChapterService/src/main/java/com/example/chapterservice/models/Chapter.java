@@ -1,27 +1,16 @@
 package com.example.chapterservice.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
-@Entity
-@Table(name = "chapters")
-@AllArgsConstructor
-@NoArgsConstructor
+@RedisHash("chapters")
 @Data
-@ToString
 public class Chapter {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long novelId;
     private String title;
-    @Lob
     private String content;
-    @ManyToOne
-    @JsonIgnore
-    private Novel novel;
 
 }

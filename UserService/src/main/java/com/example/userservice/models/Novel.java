@@ -1,35 +1,85 @@
 package com.example.userservice.models;
 
-import com.example.userservice.enums.Genre;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 import java.util.List;
 import java.util.Set;
 
-@Entity
-@Table(name = "novels")
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@ToString
 public class Novel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String novelName;
     private String description;
     private String author;
-    @ElementCollection(targetClass = Genre.class)
-    @CollectionTable(name = "genres", joinColumns = @JoinColumn(name = "novel_id"))
-    @Column(name = "genre", length = 255, nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Set<Genre> genre;
-    @OneToMany(mappedBy = "novel",cascade = CascadeType.ALL)
-    private List<Chapter> chapters;
-    @OneToMany(mappedBy = "novel",cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    private Set<String> genre;
+    private List<String> chapters;
+    private List<String> comments;
+
+    // Constructors
+    public Novel() {}
+
+    public Novel(Long id, String novelName, String description, String author, Set<String> genre, List<String> chapters, List<String> comments) {
+        this.id = id;
+        this.novelName = novelName;
+        this.description = description;
+        this.author = author;
+        this.genre = genre;
+        this.chapters = chapters;
+        this.comments = comments;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNovelName() {
+        return novelName;
+    }
+
+    public void setNovelName(String novelName) {
+        this.novelName = novelName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Set<String> getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Set<String> genre) {
+        this.genre = genre;
+    }
+
+    public List<String> getChapters() {
+        return chapters;
+    }
+
+    public void setChapters(List<String> chapters) {
+        this.chapters = chapters;
+    }
+
+    public List<String> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<String> comments) {
+        this.comments = comments;
+    }
 }
+

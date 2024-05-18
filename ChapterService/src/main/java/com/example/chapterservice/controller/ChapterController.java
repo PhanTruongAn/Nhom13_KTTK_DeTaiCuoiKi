@@ -1,7 +1,6 @@
 package com.example.chapterservice.controller;
 
 import com.example.chapterservice.models.Chapter;
-import com.example.chapterservice.models.Novel;
 import com.example.chapterservice.repository.ChapterRepository;
 import com.example.chapterservice.service.ChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/chapter")
@@ -23,28 +23,22 @@ public class ChapterController {
     private ChapterRepository repository;
 
     @PostMapping(value = "/create-chapter")
-    public ResponseEntity<String> createChapter(@RequestBody Chapter chapter, @RequestHeader("novel-id") Long novelId) {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8083/novel/find-by-id/"+novelId;
-        ResponseEntity<Novel> responseEntity = restTemplate.getForEntity(url, Novel.class);
-        Novel novel = responseEntity.getBody();
-        chapter.setNovel(novel);
-        repository.save(chapter);
+    public ResponseEntity<String> createChapter(@RequestBody Chapter chapter) {
         service.create(chapter);
-        return ResponseEntity.status(HttpStatus.OK).body("Create chapter is success!");
+        return ResponseEntity.status(HttpStatus.OK).body("Create chapter is success!"+ "\n" +chapter );
     }
 
-    @GetMapping("/get-chapter-by-novel/{id}")
-    public ResponseEntity<List<Chapter>> getChapters(@PathVariable Long id){
-         RestTemplate restTemplate = new RestTemplate();
-         String url = "http://localhost:8083/novel/get-chapters/" + id;
-        ResponseEntity<List<Chapter>> response = restTemplate.exchange(
-                url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Chapter>>() {}
-        );
-        List<Chapter> chapters = response.getBody();
-        service.saveChapters(chapters);
-        return response;
-    }
+//    @GetMapping("/get-chapter-by-novel/{id}")
+//    public ResponseEntity<List<Chapter>> getChapters(@PathVariable Long id){
+//         RestTemplate restTemplate = new RestTemplate();
+//         String url = "http://localhost:8083/novel/get-chapters/" + id;
+//        ResponseEntity<List<Chapter>> response = restTemplate.exchange(
+//                url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Chapter>>() {}
+//        );
+//        List<Chapter> chapters = response.getBody();
+//        service.saveChapters(chapters);
+//        return response;
+//    }
 
     @GetMapping("/find-by-id/{id}")
     public ResponseEntity<Chapter> findById(@PathVariable("id") Long id) {
@@ -53,6 +47,10 @@ public class ChapterController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+    }
+    @GetMapping("/chapters-by-novel/{novelId}")
+    public List<Chapter> chaptersByNovel(@PathVariable("novelId") Long novelId) {
+        return service.getChaptersByNovelId(novelId);
     }
 
     @PostMapping("/delete-by-id/{id}")

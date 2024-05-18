@@ -1,19 +1,16 @@
 package com.example.userservice.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @ToString
 public class User {
     @Id
@@ -22,11 +19,13 @@ public class User {
     private String userName;
     private String password;
     private String email;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "user_novels",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "novel_id")
-    )
-    private List<Novel> theoDoi;
+    private String role;
+    @ElementCollection
+    private List<String> novels;
+
+    public User(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+    }
+
 }

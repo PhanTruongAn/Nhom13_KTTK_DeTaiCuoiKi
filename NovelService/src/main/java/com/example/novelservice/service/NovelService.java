@@ -1,6 +1,5 @@
 package com.example.novelservice.service;
 
-import com.example.novelservice.models.Chapter;
 import com.example.novelservice.models.Novel;
 import com.example.novelservice.repository.NovelRepository;
 import org.springframework.beans.factory.annotation.Autowired;

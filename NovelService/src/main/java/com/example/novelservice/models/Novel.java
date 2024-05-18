@@ -29,10 +29,10 @@ public class Novel {
     @Column(name = "genre", length = 255, nullable = false)
     @Enumerated(EnumType.STRING)
     private Set<Genre> genre;
-    @OneToMany(mappedBy = "novel",cascade = CascadeType.ALL)
-    private List<Chapter> chapters;
-    @OneToMany(mappedBy = "novel",cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    @ElementCollection
+    private List<String> chapters;
+    @ElementCollection
+    private List<String> comments;
 
 
 }
