@@ -5,6 +5,7 @@ import com.example.novelservice.repository.NovelRepository;
 import com.example.novelservice.service.NovelService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,8 +53,12 @@ public class NovelController {
     }
 
     @GetMapping("/update-all-chapter/{id}")
+    @CircuitBreaker(name = "getAllChapters",fallbackMethod = "getChaptersFail")
     public ResponseEntity<?> updateChapters(@PathVariable Long id) {
        return service.updateChapters(id);
+    }
+    public ResponseEntity<?> getChaptersFail(Long id,Throwable t){
+      return ResponseEntity.ok().body(repository.findById(id).get());
     }
     @GetMapping("/update-all-comment/{id}")
     public ResponseEntity<?> updateComment(@PathVariable Long id) {

@@ -80,10 +80,10 @@ public class NovelService {
     }
 
 
-    @Retryable(maxAttempts=3, value = RuntimeException.class,
-            backoff = @Backoff(delay = 3000, multiplier = 1))
+//    @Retryable(maxAttempts=3, value = RuntimeException.class,
+//            backoff = @Backoff(delay = 3000, multiplier = 1))
     public ResponseEntity<?> updateChapters(@PathVariable Long id) {
-        System.out.println("Retry Run");
+//        System.out.println("Retry Run");
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:8084/chapter/chapters-by-novel/" + id;
         // Gọi REST API để lấy danh sách các chương dưới dạng JSON
@@ -110,7 +110,7 @@ public class NovelService {
         op.setChapters(chapterTitles);
             // Lưu đối tượng Novel đã cập nhật vào cơ sở dữ liệu
         repository.save(op);
-        return ResponseEntity.status(HttpStatus.OK).body(op);
+        return ResponseEntity.status(HttpStatus.OK).body(chapterTitles);
     }
 
 

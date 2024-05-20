@@ -2,6 +2,7 @@ package com.example.userservice.controller;
 
 import com.example.userservice.config.Jwt;
 import com.example.userservice.dto.LoginToken;
+import com.example.userservice.models.Notification;
 import com.example.userservice.models.Novel;
 import com.example.userservice.models.User;
 import com.example.userservice.repository.UserRepository;
@@ -93,4 +94,17 @@ public class UserController {
         return ResponseEntity.ok(op);
     }
 
+    @GetMapping("/get-notifications/{id}")
+    public ResponseEntity<List<Notification>> getAllNotification(@PathVariable Long id) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8085/notification/find-by-userId/"+id;
+        List<Notification> notifications = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Notification>>() {}
+        ).getBody();
+        // Trả về danh sách dưới dạng JSON
+        return ResponseEntity.ok(notifications);
+    }
 }

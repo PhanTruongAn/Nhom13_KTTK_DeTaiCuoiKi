@@ -1,9 +1,9 @@
 package com.example.chapterservice.service;
 
 import com.example.chapterservice.models.Chapter;
-import com.example.chapterservice.repository.ChapterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +13,14 @@ import java.util.Map;
 import java.util.Set;
 
 @Service
+@EnableRedisRepositories
 public class ChapterService {
     private static final String KEY_PREFIX = "chapters:";
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-    @Autowired
-    private ChapterRepository chapterRepository;
+//    @Autowired
+//    private ChapterRepository chapterRepository;
 
 
     public void create(Chapter chapter) {

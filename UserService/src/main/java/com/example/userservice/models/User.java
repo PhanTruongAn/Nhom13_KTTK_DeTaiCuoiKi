@@ -23,6 +23,7 @@ public class User {
     @ElementCollection
     private List<String> novels;
 
+
     public User(String userName, String password) {
         this.userName = userName;
         this.password = password;

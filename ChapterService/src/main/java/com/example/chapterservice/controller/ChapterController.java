@@ -1,7 +1,6 @@
 package com.example.chapterservice.controller;
 
 import com.example.chapterservice.models.Chapter;
-import com.example.chapterservice.repository.ChapterRepository;
 import com.example.chapterservice.service.ChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -19,8 +18,9 @@ import java.util.Optional;
 public class ChapterController {
     @Autowired
     private ChapterService service;
-    @Autowired
-    private ChapterRepository repository;
+//    @Autowired
+//    private ChapterRepository repository;
+
 
     @PostMapping(value = "/create-chapter")
     public ResponseEntity<String> createChapter(@RequestBody Chapter chapter) {
@@ -52,7 +52,6 @@ public class ChapterController {
     public List<Chapter> chaptersByNovel(@PathVariable("novelId") Long novelId) {
         return service.getChaptersByNovelId(novelId);
     }
-
     @PostMapping("/delete-by-id/{id}")
     public ResponseEntity<String> deleteById(@PathVariable("id") Long id) {
         if (service.existsById(id)) {
