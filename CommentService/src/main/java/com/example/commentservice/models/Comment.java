@@ -9,7 +9,7 @@ import lombok.ToString;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "comment")
+@Table(name = "comments")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -21,8 +21,7 @@ public class Comment {
     @Lob
     private String text;
     private LocalDate timeComment;
-    @ManyToOne
-    private User user;
-    @ManyToOne
-    private Novel novel;
+    private Long userId;
+    private Long novelId;
+
 }

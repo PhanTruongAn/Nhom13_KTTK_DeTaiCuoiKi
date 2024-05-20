@@ -6,8 +6,13 @@ import com.example.novelservice.service.NovelService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -26,6 +31,7 @@ public class NovelController {
     public List<Novel> getAllNovel(){
         return service.getAllNovel();
     }
+
     @GetMapping("/find-by-id/{id}")
     public Optional<Novel> getNovelByID(@PathVariable Long id){
         return repository.findById(id);
@@ -45,40 +51,17 @@ public class NovelController {
         return ResponseEntity.ok(service.updateNovel(novel));
     }
 
-    @PostMapping("/update-all-chapter/{id}")
-    public Optional<Novel> getChapters(@PathVariable Long id) {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8084/chapter/chapters-by-novel/" + id;
-        // Gọi REST API để lấy danh sách các chương dưới dạng JSON
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
-        String jsonResponse = responseEntity.getBody();
-
-        // Khởi tạo danh sách các titles
-        List<String> chapterTitles = new ArrayList<>();
-
-        // Chuyển đổi JSON thành một cây JSON
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(jsonResponse);
-
-            // Duyệt qua mỗi nút trong cây JSON và lấy giá trị của trường "title"
-            for (JsonNode chapterNode : jsonNode) {
-                String title = chapterNode.get("title").asText();
-                chapterTitles.add(title);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Khởi tạo một đối tượng Novel và gán danh sách titles vào trường chapters của nó
-        Optional<Novel> op = repository.findById(id);
-        if (op.isPresent()) {
-            Novel novel = op.get();
-            // Cập nhật trường chapters của đối tượng Novel với danh sách tiêu đề chương mới
-            novel.setChapters(chapterTitles);
-            // Lưu đối tượng Novel đã cập nhật vào cơ sở dữ liệu
-            service.saveNovel(novel);
-        }
-        return op;
+    @GetMapping("/update-all-chapter/{id}")
+    public ResponseEntity<?> updateChapters(@PathVariable Long id) {
+       return service.updateChapters(id);
     }
+    @GetMapping("/update-all-comment/{id}")
+    public ResponseEntity<?> updateComment(@PathVariable Long id) {
+        return service.updateComment(id);
+    }
+    @GetMapping("/get-chapter/{id}")
+    public ResponseEntity<?> getChapter(@PathVariable Long id){
+        return service.getChapter(id);
+    }
+
 }
