@@ -1,0 +1,142 @@
+version: '3.7'
+services:
+  mysqldb:
+    container_name: mysqldb
+    image: mysql
+    environment:
+      MYSQL_PASSWORD: 123
+      MYSQL_DATABASE: docker
+      MYSQL_ROOT_PASSWORD: 123
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - docker-compose
+    restart: always
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
+    networks:
+      - docker-compose
+  novel:
+    container_name: novel-service
+    image: novel
+    ports:
+      - "8083:8083"
+    build:
+      context: ./NovelService
+      dockerfile: Dockerfile
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/novel-service?createDatabaseIfNotExist=true
+      - spring.datasource.username=root
+      - spring.datasource.password=123
+      - spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+      - spring.jpa.hibernate.ddl-auto=update
+      - server.port=8083
+    depends_on:
+      - mysqldb
+      - chapter
+      - comment
+    networks:
+      - docker-compose
+  user:
+    container_name: user-service
+    image: user
+    ports:
+      - "8081:8081"
+    build:
+      context: ./UserService
+      dockerfile: Dockerfile
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/user-service?createDatabaseIfNotExist=true
+      - spring.datasource.username=root
+      - spring.datasource.password=123
+      - spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+      - spring.jpa.hibernate.ddl-auto=update
+      - server.port=8081
+    depends_on:
+      - mysqldb
+      - novel
+      - notification
+    networks:
+      - docker-compose
+  chapter:
+    container_name: chapter-service
+    image: chapter
+    ports:
+      - "8084:8084"
+    build:
+      context: ./ChapterService
+      dockerfile: Dockerfile
+    environment:
+      - server.port=8084
+      - spring.data.redis.host=redis
+      - spring.data.redis.port=6379
+    depends_on:
+      - mysqldb
+      - redis
+    networks:
+      - docker-compose
+  comment:
+    container_name: comment-service
+    image: comment
+    ports:
+      - "8082:8082"
+    build:
+      context: ./CommentService
+      dockerfile: Dockerfile
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/comment-service?createDatabaseIfNotExist=true
+      - spring.datasource.username=root
+      - spring.datasource.password=123
+      - spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+      - spring.jpa.hibernate.ddl-auto=update
+      - server.port=8082
+    depends_on:
+      - mysqldb
+    networks:
+      - docker-compose
+  notification:
+    container_name: notification-service
+    image: notification
+    ports:
+      - "8085:8085"
+    build:
+      context: ./NotificationService
+      dockerfile: Dockerfile
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/notification-service?createDatabaseIfNotExist=true
+      - spring.datasource.username=root
+      - spring.datasource.password=123
+      - spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+      - spring.jpa.hibernate.ddl-auto=update
+      - server.port=8085
+    depends_on:
+      - mysqldb
+    networks:
+      - docker-compose
+  gateway:
+    container_name: gateway
+    image: gateway
+    build:
+      context: ./ApiGateway
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - http://novel:8083
+      - http://chapter:8084
+      - http://user:8081
+      - http://comment:8082
+      - http://notification:8085
+    networks:
+      - docker-compose
+
+networks:
+  docker-compose:
+    driver: bridge

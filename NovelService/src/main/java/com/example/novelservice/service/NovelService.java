@@ -22,7 +22,8 @@ import java.util.Optional;
 public class NovelService {
     @Autowired
     private NovelRepository repository;
-
+    public static String COMMENT_HOST = "comment";
+    public static String CHAPTER_HOST = "chapter";
     public Novel saveNovel(Novel novel){
         return repository.save(novel);
     }
@@ -46,7 +47,7 @@ public class NovelService {
     public ResponseEntity<?> updateComment(@PathVariable Long id) {
         System.out.println("Retry Run");
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8082/comment/comments-by-novel/" + id;
+        String url = "http://"+COMMENT_HOST+":8082/comment/comments-by-novel/" + id;
         // Gọi REST API để lấy danh sách các chương dưới dạng JSON
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
         String jsonResponse = responseEntity.getBody();
@@ -85,7 +86,7 @@ public class NovelService {
     public ResponseEntity<?> updateChapters(@PathVariable Long id) {
 //        System.out.println("Retry Run");
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8084/chapter/chapters-by-novel/" + id;
+        String url = "http://"+CHAPTER_HOST+":8084/chapter/chapters-by-novel/" + id;
         // Gọi REST API để lấy danh sách các chương dưới dạng JSON
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
         String jsonResponse = responseEntity.getBody();
@@ -121,7 +122,7 @@ public class NovelService {
     public ResponseEntity<?> getChapter(@PathVariable Long id) {
         System.out.println("Retry Run");
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8084/chapter/find-by-id/"+id;
+        String url = "http://"+CHAPTER_HOST+":8084/chapter/find-by-id/"+id;
         String response = restTemplate.getForObject(url,String.class);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

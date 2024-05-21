@@ -30,6 +30,8 @@ public class UserController {
     private UserService service;
     @Autowired
     private UserRepository repository;
+    public static String NOVEL_HOST = "novel";
+    public static String NOTIFICATION_HOST = "notification";
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
@@ -51,7 +53,7 @@ public class UserController {
     @GetMapping("/get-all-novel")
     public ResponseEntity<List<Novel>> getAllNovel() {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8083/novel/get-all";
+        String url = "http://"+NOVEL_HOST+":8083/novel/get-all";
         // Sử dụng restTemplate.exchange với phương thức ngắn hơn
         List<Novel> novels = restTemplate.exchange(
                 url,
@@ -65,7 +67,7 @@ public class UserController {
     @PostMapping("/update-novels/{id}")
     public ResponseEntity<?> getNovel(@PathVariable Long id,@RequestHeader("user-id") Long userId) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8083/novel/find-by-id/" + id;
+        String url = "http://"+NOVEL_HOST+":8083/novel/find-by-id/" + id;
         // Gọi REST API để lấy danh sách các chương dưới dạng JSON
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
         String jsonResponse = responseEntity.getBody();
@@ -97,7 +99,7 @@ public class UserController {
     @GetMapping("/get-notifications/{id}")
     public ResponseEntity<List<Notification>> getAllNotification(@PathVariable Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8085/notification/find-by-userId/"+id;
+        String url = "http://"+NOTIFICATION_HOST+":8085/notification/find-by-userId/"+id;
         List<Notification> notifications = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
